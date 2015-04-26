@@ -1,0 +1,51 @@
+> source("C:/Users/ag/Documents/R/ProgrammingAssignment2/cachematrix.R")
+
+> makeCacheMatrix
+function(x = matrix()) {
+
+        r <- NULL
+        set <- function(y) {
+                x <<- y
+                y <<- NULL 
+        }
+        get <- function() { x }
+        setinverse <- function(solve) { r <<- solve }
+        getinverse <- function() { r }
+        list(set = set, get = get,
+                setinverse = setinverse,
+                getinverse = getinverse)
+}
+> cacheSolve
+function(x, ...) {
+        ## Return a matrix that is the inverse of 'x'
+        
+        r <- x$getinverse()
+        if(!is.null(r)) {
+                message("getting cached data")
+                return (r)
+        }
+        data <- x$get()
+        r <- solve(data)
+        x$setinverse(r)
+        r
+
+
+}
+> m <- matrix(c(-1, -2, 1, 1), 2,2)
+> x <- makeCacheMatrix(m)
+> x$get()
+     [,1] [,2]
+[1,]   -1    1
+[2,]   -2    1
+> inv <- cacheSolve(x)
+> inv
+     [,1] [,2]
+[1,]    1   -1
+[2,]    2   -1
+> inv <- cacheSolve(x)
+getting cached data
+> inv
+     [,1] [,2]
+[1,]    1   -1
+[2,]    2   -1
+> 
